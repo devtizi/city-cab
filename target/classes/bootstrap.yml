@@ -1,0 +1,48 @@
+spring:
+  application:
+    name: citycab
+  cloud:
+    vault:
+      enabled: true
+      host: ${VAULT_HOST:localhost}
+      port: ${VAULT_PORT:8200}
+      scheme: ${VAULT_SCHEME:http}
+      authentication: ${VAULT_AUTH_METHOD:TOKEN}
+      token: ${VAULT_TOKEN:cM0zmhdVVW}
+      kv:
+        enabled: true
+        backend: secret
+        default-context: ${spring.application.name}
+        profile-separator: '/'
+        application-name: ${spring.application.name}
+      ssl:
+        trust-store: classpath:keystore.jks
+        trust-store-password: ${TRUST_STORE_PASSWORD}
+      connection-timeout: 5000
+      read-timeout: 15000
+      fail-fast: true
+      config:
+        order: -10
+
+# Orange Money configuration (si elle vient de Vault)
+orange:
+  money:
+    api:
+      base-url: https://api-s1.orange.cm
+      token-url: ${orange.money.api.base-url}/token
+      init-url: ${orange.money.api.base-url}/omcoreapis/1.0.2/mp/init
+      pay-url: ${orange.money.api.base-url}/omcoreapis/1.0.2/mp/pay
+      status-url: ${orange.money.api.base-url}/omcoreapis/1.0.2/mp/paymentstatus
+    credentials:
+      customer-key: ${ORANGE_CUSTOMER_KEY}
+      customer-secret: ${ORANGE_CUSTOMER_SECRET}
+      x-auth-token: ${ORANGE_X_AUTH_TOKEN}
+      channel-user-msisdn: ${ORANGE_CHANNEL_USER_MSISDN}
+      pin: ${ORANGE_PIN}
+    cache:
+      token-ttl-buffer-seconds: 300
+    circuit-breaker:
+      enabled: true
+      failure-threshold: 5
+      timeout-duration: 10000
+      reset-duration: 60000

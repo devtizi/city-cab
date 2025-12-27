@@ -1,0 +1,43 @@
+server:
+  port: 8081
+
+spring:
+  datasource:
+    username: admin
+    password: 1234  # Devrait venir de Vault en production
+    url: jdbc:postgresql://localhost:5432/citycab
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+  application:
+    name: camerge-backend
+
+app:
+  environment: development
+  default-role: MANAGER
+  
+  # Vault configuration
+  vault:
+    uri: http://localhost:8200
+    token: s.1234567890abcdef  # Devrait être sécurisé en production
+    database-credentials-path: database/creds/citycab-role
+# JWT configuration
+jwt:
+  issuer: test-issuer
+  access-token-expiration: 30
+  refresh-token-expiration: 7
+  audience:
+    web: web-client
+    mobile: mobile-client
+
+# Security configuration
+citycab:
+  security:
+    enabled: true
+
+logging:
+  level:
+    org.springframework.vault: DEBUG
+    com.citycab.demo: DEBUG
